@@ -29,8 +29,7 @@ class Trainer(object):
         # Initialize TensorFlow monitored training session
         self.sess =  tf.train.MonitoredTrainingSession(
                         hooks = hooks,
-                        config = self.sess_config,
-                        )
+                        config = self.sess_config)
 
         # init windows for time and each losses
         self.reset_time_windows()

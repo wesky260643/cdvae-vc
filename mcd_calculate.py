@@ -23,6 +23,7 @@ import multiprocessing as mp
 import sys
 from preprocessing.vcc2018.feature_reader import Whole_feature_reader
 from util.normalizer import MinMaxScaler
+import glob
 
 def read_and_synthesize(file_list, arch, MCD, input_feat, output_feat):
     
@@ -107,7 +108,8 @@ def main():
     src, trg = output_dir.split('-')[-2:]
     
     # Load architecture
-    arch = tf.gfile.Glob(os.path.join(train_dir, 'architecture*.json'))[0]  # should only be 1 file
+    # arch = tf.gfile.Glob(os.path.join(train_dir, 'architecture*.json'))[0]  # should only be 1 file
+    arch = glob.glob(os.path.join(train_dir, 'architecture*.json'))[0]  # should only be 1 file
     with open(arch) as fp:
         arch = json.load(fp)
     
@@ -116,16 +118,23 @@ def main():
     output_feat = args.output_feat
     
     # Get and divide list
-    bin_list = sorted(tf.gfile.Glob(os.path.join(args.logdir, 'converted-{}'.format(output_feat), '*.bin')))
+    # bin_list = sorted(tf.gfile.Glob(os.path.join(args.logdir, 'converted-{}'.format(output_feat), '*.bin')))
+    bin_list = sorted(glob.glob(os.path.join(args.logdir, 'converted-{}'.format(output_feat), '*.bin')))
     if args.type == 'test':
-        src_feat_list = sorted(tf.gfile.Glob(arch['conversion']['test_file_pattern'].format(src)))
-        trg_feat_list = sorted(tf.gfile.Glob(arch['conversion']['test_file_pattern'].format(trg)))
+        print(glob.glob(arch['conversion']['test_file_pattern'].format(src)))
+        print(arch['conversion']['test_file_pattern'].format(src))
+        # src_feat_list = sorted(tf.gfile.Glob(arch['conversion']['test_file_pattern'].format(src)))
+        src_feat_list = sorted(glob.glob(arch['conversion']['test_file_pattern'].format(src)))
+        # trg_feat_list = sorted(tf.gfile.Glob(arch['conversion']['test_file_pattern'].format(trg)))
+        trg_feat_list = sorted(glob.glob(arch['conversion']['test_file_pattern'].format(trg)))
     elif args.type == 'valid':
         src_feat_list = []
         trg_feat_list = []
         for p in arch['training']['valid_file_pattern']:
-            src_feat_list.extend(tf.gfile.Glob(p.replace('*', src)))
-            trg_feat_list.extend(tf.gfile.Glob(p.replace('*', trg)))
+            # src_feat_list.extend(tf.gfile.Glob(p.replace('*', src)))
+            # trg_feat_list.extend(tf.gfile.Glob(p.replace('*', trg)))
+            src_feat_list.extend(glob.glob(p.replace('*', src, 1)))
+            trg_feat_list.extend(glob.glob(p.replace('*', trg, 1)))
         src_feat_list = sorted(src_feat_list)
         trg_feat_list = sorted(trg_feat_list)
 

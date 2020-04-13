@@ -3,7 +3,7 @@
     "model_module": "model.cdvae-cls-gan-mcc",
     "trainer": "CDVAECLSGANTrainer",
     "trainer_module": "trainer.cdvae-cls-gan",
-    "stats": "./data/vcc2018/stats/stats.h5",
+    "stats": "./data/vcc2018/vcc2018_training.speakers/stats/stats.h5",
     "spklist": "./data/vcc2018/conf/spk.list",
 
     "z_dim": 16,
@@ -58,29 +58,29 @@
         }
     },
 	"training": {
-        "train_file_pattern": ["./data/vcc2018/bin/VAD/*/[12]00[0-6]?.bin",
-                               "./data/vcc2018/bin/VAD/*/[12]0070.bin"],
-        "valid_file_pattern": ["./data/vcc2018/bin/VAD/*/[12]007[1-9].bin",
-                               "./data/vcc2018/bin/VAD/*/[12]008[0-1].bin"],
+        "train_file_pattern": ["./data/vcc2018/vcc2018_training.speakers.bin/VAD//*/*[12]00[0-6]?.bin",
+                               "./data/vcc2018/vcc2018_training.speakers.bin/VAD//*/*[12]0070.bin"],
+        "valid_file_pattern": ["./data/vcc2018/vcc2018_training.speakers.bin/VAD//*/*[12]007[1-9].bin",
+                               "./data/vcc2018/vcc2018_training.speakers.bin/VAD//*/*[12]008[0-1].bin"],
         "batch_size": 16,
         "crop_length": 128, 
 		"lr": 1e-4,
 		"beta1": 0.5,
         "beta2": 0.999,
         "nIterD": 5,
-        "vae_iter": 100,
-        "cls_iter": 100,
+        "vae_iter": 100000,
+        "cls_iter": 30000,
         "gan_iter": 300,
-        "max_iter": 500,
+        "max_iter": 150000,
         "save_freq": 10000, 
-        "summary_freq": 1000, 
+        "summary_freq": 100, 
         "log_freq": 10,
         "gamma": 100,
         "lambda": 1000,
         "gp_weight": 10
 	},
     "conversion": {
-        "test_file_pattern": "./data/vcc2018/bin/noVAD/{}/3*.bin"
+        "test_file_pattern": "./data/vcc2018/vcc2018_evaluation.speakers.bin/noVAD/{}/VCC2*_3*.bin"
     },
     "feat_param":{
         "fs": 22050,

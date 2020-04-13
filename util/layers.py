@@ -52,15 +52,17 @@ def conv2d_nchw_layernorm(x, o, k, s, activation, name):
         `s`: stride
     '''
     with tf.variable_scope(name):
+        # x = tf.keras.layers.Conv2D(
+        x = tf.transpose(x, perm=[0, 2, 3, 1]) # NCHW to NHWC
         x = tf.layers.conv2d(
             inputs=x,
             filters=o,
             kernel_size=k,
             strides=s,
             padding='same',
-            data_format='channels_first',
-            name=name,
-        )
+            data_format='channels_last',
+            name=name)
+        x = tf.transpose(x, perm=[0, 3, 1, 2]) # NHWC to NCHW
         x = Layernorm(x, [1, 2, 3], 'layernorm')
         return activation(x)
 

@@ -95,7 +95,7 @@ def world_feature_extract(wav_list, spk_list, feat_param_list, args):
 
         # check sampling frequency
         if not fs == feat_param['fs']:
-            logging.error("sampling frequency is not matched.")
+            logging.error("sampling frequency is not matched: %s" % wav_name)
             sys.exit(1)
 
         # extract features

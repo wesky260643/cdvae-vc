@@ -11,6 +11,7 @@ import h5py
 import logging
 from scipy.io import wavfile
 from sprocket.speech.synthesizer import Synthesizer
+import glob
 
 import tensorflow as tf
 
@@ -33,8 +34,10 @@ def Segment_feature_reader(
         record_bytes = FEAT_DIM * 4
         
         files = []
+        print("------ file file_pattern ---", file_pattern)
         for p in file_pattern:
-            files.extend(tf.gfile.Glob(p))
+            # files.extend(tf.gfile.Glob(p))
+            files.extend(glob.glob(p))
 
         print('Found {} files'.format(len(files)))
         

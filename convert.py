@@ -20,39 +20,32 @@ from preprocessing.vcc2018.feature_reader import Whole_feature_reader
 from util.normalizer import MinMaxScaler, StandardScaler
 from util.misc import read_hdf5, read_txt, load, get_default_logdir_output
 
+import glob
+
 def main():
     
     parser = argparse.ArgumentParser(
         description="Conversion.")
-    parser.add_argument(
-        "--logdir", required=True, type=str,
+    parser.add_argument("--logdir", required=True, type=str,
         help="path of log directory")
-    parser.add_argument(
-        "--checkpoint", default=None, type=str,
+    parser.add_argument("--checkpoint", default=None, type=str,
         help="path of checkpoint")
     
-    parser.add_argument(
-        "--src", default=None, required=True, type=str,
+    parser.add_argument("--src", default=None, required=True, type=str,
         help="source speaker")
-    parser.add_argument(
-        "--trg", default=None, required=True, type=str,
+    parser.add_argument("--trg", default=None, required=True, type=str,
         help="target speaker")
-    parser.add_argument(
-        "--type", default='test', type=str,
+    parser.add_argument("--type", default='test', type=str,
         help="test or valid (default is test)")
     
     
-    parser.add_argument(
-        "--input_feat", required=True, 
+    parser.add_argument("--input_feat", required=True, 
         type=str, help="input feature type")
-    parser.add_argument(
-        "--output_feat", required=True, 
+    parser.add_argument("--output_feat", required=True, 
         type=str, help="output feature type")
-    parser.add_argument(
-        "--mcd", action='store_true',
+    parser.add_argument("--mcd", action='store_true',
         help="calculate mcd or not")
-    parser.add_argument(
-        "--syn", action='store_true',
+    parser.add_argument("--syn", action='store_true',
         help="synthesize voice or not")
     args = parser.parse_args()
 
@@ -78,7 +71,8 @@ def main():
     logging.info(args)
 
     # Load architecture
-    arch = tf.gfile.Glob(os.path.join(args.logdir, 'architecture*.json'))[0]  # should only be 1 file
+    # arch = tf.gfile.Glob(os.path.join(args.logdir, 'architecture*.json'))[0]  # should only be 1 file
+    arch = glob.glob(os.path.join(args.logdir, 'architecture*.json'))[0]  # should only be 1 file
     with open(arch) as fp:
         arch = json.load(fp)
     
@@ -142,11 +136,13 @@ def main():
 
         # get feature list, either validation set or test set
         if args.type == 'test':
-            files = tf.gfile.Glob(arch['conversion']['test_file_pattern'].format(args.src))
+            # files = tf.gfile.Glob(arch['conversion']['test_file_pattern'].format(args.src))
+            files = glob.glob(arch['conversion']['test_file_pattern'].format(args.src))
         elif args.type == 'valid':
             files = []
             for p in arch['training']['valid_file_pattern']:
-                files.extend(tf.gfile.Glob(p.replace('*', args.src)))
+                # files.extend(tf.gfile.Glob(p.replace('*', args.src)))
+                files.extend(glob.glob(p.replace('*', args.src)))
         files = sorted(files)
 
         # conversion

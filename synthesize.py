@@ -21,6 +21,7 @@ from scipy.io import wavfile
 import argparse
 import logging
 import multiprocessing as mp
+import glob
 
 import sys
 from preprocessing.vcc2018.feature_reader import Whole_feature_reader
@@ -116,7 +117,8 @@ def main():
     src, trg = output_dir.split('-')[-2:]
     
     # Load architecture
-    arch = tf.gfile.Glob(os.path.join(train_dir, 'architecture*.json'))[0]  # should only be 1 file
+    # arch = tf.gfile.Glob(os.path.join(train_dir, 'architecture*.json'))[0]  # should only be 1 file
+    arch = glob.glob(os.path.join(train_dir, 'architecture*.json'))[0]  # should only be 1 file
     with open(arch) as fp:
         arch = json.load(fp)
     
@@ -136,13 +138,16 @@ def main():
     tf.gfile.MakeDirs(os.path.join(args.logdir, 'converted-wav'))
 
     # Get and divide list
-    bin_list = sorted(tf.gfile.Glob(os.path.join(args.logdir, 'converted-{}'.format(output_feat), '*.bin')))
+    # bin_list = sorted(tf.gfile.Glob(os.path.join(args.logdir, 'converted-{}'.format(output_feat), '*.bin')))
+    bin_list = sorted(glob.glob(os.path.join(args.logdir, 'converted-{}'.format(output_feat), '*.bin')))
     if args.type == 'test':
-        feat_list = sorted(tf.gfile.Glob(arch['conversion']['test_file_pattern'].format(src)))
+        # feat_list = sorted(tf.gfile.Glob(arch['conversion']['test_file_pattern'].format(src)))
+        feat_list = sorted(glob.glob(arch['conversion']['test_file_pattern'].format(src)))
     elif args.type == 'valid':
         feat_list = []
         for p in arch['training']['valid_file_pattern']:
-            feat_list.extend(tf.gfile.Glob(p.replace('*', src)))
+            # feat_list.extend(tf.gfile.Glob(p.replace('*', src)))
+            feat_list.extend(glob.glob(p.replace('*', src)))
         feat_list = sorted(feat_list)
 
     assert(len(bin_list) == len(feat_list))

@@ -11,7 +11,7 @@ import json
 import tensorflow as tf
 import numpy as np
 
-from util.wrapper import save, get_default_logdir_train
+from util.misc import save, get_default_logdir_train
 from importlib import import_module
 
 import argparse
@@ -26,20 +26,15 @@ def main():
     
     parser = argparse.ArgumentParser(
         description="Train the model.")
-    parser.add_argument(
-        "--architecture", required=True, type=str,
+    parser.add_argument("--architecture", required=True, type=str,
         help="network architecture")
-    parser.add_argument(
-        "--note", required=True, type=str,
+    parser.add_argument("--note", required=True, type=str,
         help="note on experiemnt")
-    parser.add_argument(
-        "--logdir", default=None, type=str,
+    parser.add_argument("--logdir", default=None, type=str,
         help="path of log directory")
-    parser.add_argument(
-        "--checkpoint", default=None, type=str,
+    parser.add_argument("--checkpoint", default=None, type=str,
         help="path of checkpoint")
-    parser.add_argument(
-        "--seed", default=12,
+    parser.add_argument("--seed", default=12,
         type=int, help="initialization seed")
     args = parser.parse_args()
 

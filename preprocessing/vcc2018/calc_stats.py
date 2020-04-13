@@ -15,8 +15,11 @@ from sklearn.preprocessing import StandardScaler
 
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
+print("--------- sys path ---------")
+print(sys.path)
 from util.misc import (find_files, read_txt, write_hdf5)
-from preprocess.vcc2018.feature_reader import Whole_feature_reader
+# from preprocess.vcc2018.feature_reader import Whole_feature_reader
+from feature_reader import Whole_feature_reader
 
 def calc_stats(file_list, feat_param, spk_list, args):
     
@@ -37,15 +40,15 @@ def calc_stats(file_list, feat_param, spk_list, args):
         reader = Whole_feature_reader
         feats = reader(filename, feat_param)
         
-        sp_all          .append(feats['sp'])
-        mcc_all         .append(feats['mcc'])
-        f0_all          .append(feats['f0'])
-        spk_all         .append(feats['speaker'])
+        sp_all.append(feats['sp'])
+        mcc_all.append(feats['mcc'])
+        f0_all.append(feats['f0'])
+        spk_all.append(feats['speaker'])
 
         # calculate mean/var  [sp, mcc, f0, mag_sgram, mel_sgram]
         global_feats = np.concatenate([feats['sp'], feats['mcc'], np.expand_dims(feats['f0'], 1)], axis=1)
         standard_scaler.partial_fit(global_feats)
-
+    print("----len ---", len(sp_all))
     sp_all = np.concatenate(sp_all, axis=0)
     mcc_all = np.concatenate(mcc_all, axis=0)
     f0_all = np.concatenate(f0_all, axis=0)
@@ -165,7 +168,8 @@ def main():
     spk_list = read_txt(args.spklist)
 
     # read file list, for trainind data only
-    file_list = sorted(find_files(args.bindir, "[12]*.bin"))
+    # file_list = sorted(find_files(args.bindir, "[12]*.bin"))
+    file_list = sorted(find_files(args.bindir, "*.bin"))
     logging.info("number of utterances = %d" % len(file_list))
 
     # calculate statistics

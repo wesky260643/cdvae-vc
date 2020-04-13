@@ -11,13 +11,11 @@ class CDVAECLSGANTrainer(Trainer):
     '''
     Trainer for training CDVAE-CLS-GAN 
     '''
-
     def _optimize(self):
         """ get the following operators:
             opt: update operator
             global_step: global step
         """
-        
         global_step = tf.train.get_or_create_global_step()
         lr = self.arch['training']['lr']
         b1 = self.arch['training']['beta1']
@@ -90,13 +88,13 @@ class CDVAECLSGANTrainer(Trainer):
         start_time = time.time()
         # Iterate through training steps
         while not sess.should_stop():
-
             # update global step
             step = tf.train.global_step(sess, self.opt['global_step'])
             
             ##########################
             # Phase 1: train the VAE #
             ##########################
+            vae_total_step = self.arch['training']['vae_iter']
             if (step+1) <= self.arch['training']['vae_iter']:
                 feed_dict = {
                     self.opt['gamma']: 0.,
@@ -112,7 +110,7 @@ class CDVAECLSGANTrainer(Trainer):
                     self.update_windows(elapsed_time, results)
                
                     # log
-                    msg = self.model.get_train_log(results['step'], self.time_window, self.loss_windows)
+                    msg = self.model.get_train_log(results['step'], vae_total_step, self.time_window, self.loss_windows)
                     self.print_log(msg)
 
                 else:
@@ -122,6 +120,7 @@ class CDVAECLSGANTrainer(Trainer):
             # Phase 2: train the CLS #
             ##########################
             elif (step+1) > self.arch['training']['vae_iter'] and (step+1) <= (self.arch['training']['vae_iter'] + self.arch['training']['cls_iter']):
+                cls_total_step = self.arch['training']['vae_iter'] + self.arch['training']['cls_iter']
                 feed_dict = {
                     self.opt['gamma']: 0.,
                     self.opt['lambda']: 0.
@@ -136,7 +135,7 @@ class CDVAECLSGANTrainer(Trainer):
                     self.update_windows(elapsed_time, results)
                
                     # log
-                    msg = self.model.get_train_log(results['step'], self.time_window, self.loss_windows)
+                    msg = self.model.get_train_log(results['step'], cls_total_step, self.time_window, self.loss_windows)
                     self.print_log(msg)
                 else:
                     _ = sess.run(fetches['cls'], feed_dict=feed_dict)
@@ -145,6 +144,7 @@ class CDVAECLSGANTrainer(Trainer):
             # Phase 3: train the whole network #
             ####################################
             else:
+                whole_total_step = self.arch['training']['max_iter']
                 feed_dict = {
                     self.opt['gamma']: self.arch['training']['gamma'],
                     self.opt['lambda']: self.arch['training']['lambda']
