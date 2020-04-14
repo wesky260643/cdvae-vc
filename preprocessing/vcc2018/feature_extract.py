@@ -59,7 +59,8 @@ def low_cut_filter(x, fs, cutoff=70):
 def filepath_create(wav_list, bindir):
     """CREATE FILE FOLDER"""
     for wav_name in wav_list:
-        spk = os.path.dirname(wav_name).split('/')[-1][-3:]
+        # spk = os.path.dirname(wav_name).split('/')[-1][-3:]
+        spk = os.path.dirname(wav_name).split('/')[-1]
         novad_bin_dir = os.path.join(bindir, 'noVAD', spk)
         vad_bin_dir = os.path.join(bindir, 'VAD', spk)
         
@@ -73,7 +74,8 @@ def world_feature_extract(wav_list, spk_list, feat_param_list, args):
 
     for i, wav_name in enumerate(wav_list):
         bin_basename = os.path.basename(wav_name).replace('wav', 'bin')
-        spk = os.path.dirname(wav_name).split('/')[-1][-3:]
+        # spk = os.path.dirname(wav_name).split('/')[-1][-3:]
+        spk = os.path.dirname(wav_name).split('/')[-1]
         bin_name = os.path.join(args.bindir, 'noVAD', spk, bin_basename)
         vad_bin_name = os.path.join(args.bindir, 'VAD', spk, bin_basename)
 

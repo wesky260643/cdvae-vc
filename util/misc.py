@@ -28,7 +28,7 @@ def read_hdf5(hdf5_name, hdf5_path):
         print("ERROR: There is no such a hdf5 file. (%s)" % hdf5_name)
         print("Please check the hdf5 file path.")
         sys.exit(-1)
-
+    print("---------- hdf5 path -----------", hdf5_name)
     hdf5_file = h5py.File(hdf5_name, "r")
 
     if hdf5_path not in hdf5_file:
@@ -137,7 +137,7 @@ def load(saver, sess, logdir, ckpt=None):
     if ckpt:
         ckpt = os.path.join(logdir, ckpt)
         global_step = int(ckpt.split('/')[-1].split('-')[-1])
-        logging.info('  Global step: {}'.format(global_step))
+        logging.info('Global step: {}'.format(global_step))
         saver.restore(sess, ckpt)
         return global_step
     else:

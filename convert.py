@@ -38,7 +38,6 @@ def main():
     parser.add_argument("--type", default='test', type=str,
         help="test or valid (default is test)")
     
-    
     parser.add_argument("--input_feat", required=True, 
         type=str, help="input feature type")
     parser.add_argument("--output_feat", required=True, 

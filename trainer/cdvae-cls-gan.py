@@ -165,7 +165,7 @@ class CDVAECLSGANTrainer(Trainer):
                     self.update_windows(elapsed_time, results)
                
                     # log
-                    msg = self.model.get_train_log(results['step'], self.time_window, self.loss_windows)
+                    msg = self.model.get_train_log(results['step'], whole_total_step, self.time_window, self.loss_windows)
                     self.print_log(msg)
                     
                 else:

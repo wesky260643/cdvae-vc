@@ -71,7 +71,7 @@
         "vae_iter": 100000,
         "cls_iter": 30000,
         "gan_iter": 300,
-        "max_iter": 150000,
+        "max_iter": 180000,
         "save_freq": 10000, 
         "summary_freq": 100, 
         "log_freq": 10,

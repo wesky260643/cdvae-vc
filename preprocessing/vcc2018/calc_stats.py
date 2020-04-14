@@ -15,8 +15,6 @@ from sklearn.preprocessing import StandardScaler
 
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.dirname(__file__))))
-print("--------- sys path ---------")
-print(sys.path)
 from util.misc import (find_files, read_txt, write_hdf5)
 # from preprocess.vcc2018.feature_reader import Whole_feature_reader
 from feature_reader import Whole_feature_reader
@@ -118,17 +116,13 @@ def calc_stats(file_list, feat_param, spk_list, args):
 def main():
     parser = argparse.ArgumentParser()
 
-    parser.add_argument(
-        "--bindir", required=True, type=str,
+    parser.add_argument("--bindir", required=True, type=str,
         help="name of the dir of bin files")
-    parser.add_argument(
-        "--stats", required=True, type=str,
+    parser.add_argument("--stats", required=True, type=str,
         help="filename of hdf5 format")
-    parser.add_argument(
-        "--spklist", required=True, type=str,
+    parser.add_argument("--spklist", required=True, type=str,
         help="list of speakers")
-    parser.add_argument(
-        "--verbose", default=1,
+    parser.add_argument("--verbose", default=1,
         type=int, help="log message level")
 
     args = parser.parse_args()
