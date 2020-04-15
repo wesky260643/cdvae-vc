@@ -4,7 +4,7 @@
 # @File Name :
 # @Purpose :
 # @Creation Date : 2020-04-15 09:28:48
-# @Last Modified : 2020-04-15 15:41:39
+# @Last Modified : 2020-04-15 16:14:33
 # @Created By :  chenjiang
 # @Modified By :  chenjiang
 
@@ -219,11 +219,7 @@ def main():
     # calc_stats(file_list, feat_param, spk_list, args)
     import time
     calc_sp_stats(file_list, feat_param, spk_list, args)
-    print("calc_sp_stats done, waiting ...................")
-    time.sleep(30)
     calc_mcc_stats(file_list, feat_param, spk_list, args)
-    print("calc_mcc_stats done, waiting ...................")
-    time.sleep(30)
     calc_f0_stats(file_list, feat_param, spk_list, args)
 
 
