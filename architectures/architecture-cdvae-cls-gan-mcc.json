@@ -75,8 +75,8 @@
         "save_freq": 10000, 
         "summary_freq": 100, 
         "log_freq": 10,
-        "gamma": 100,
-        "lambda": 1000,
+        "gamma": 50,
+        "lambda": 100,
         "gp_weight": 10
 	},
     "conversion": {

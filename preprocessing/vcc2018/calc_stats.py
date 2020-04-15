@@ -46,7 +46,6 @@ def calc_stats(file_list, feat_param, spk_list, args):
         # calculate mean/var  [sp, mcc, f0, mag_sgram, mel_sgram]
         global_feats = np.concatenate([feats['sp'], feats['mcc'], np.expand_dims(feats['f0'], 1)], axis=1)
         standard_scaler.partial_fit(global_feats)
-    print("----len ---", len(sp_all))
     sp_all = np.concatenate(sp_all, axis=0)
     mcc_all = np.concatenate(mcc_all, axis=0)
     f0_all = np.concatenate(f0_all, axis=0)
