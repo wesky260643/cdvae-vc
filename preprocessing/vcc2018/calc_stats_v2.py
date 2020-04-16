@@ -4,7 +4,7 @@
 # @File Name :
 # @Purpose :
 # @Creation Date : 2020-04-15 09:28:48
-# @Last Modified : 2020-04-15 16:14:33
+# @Last Modified : 2020-04-16 17:27:22
 # @Created By :  chenjiang
 # @Modified By :  chenjiang
 
@@ -14,6 +14,7 @@ import logging
 
 import numpy as np
 import os
+import math
 
 from sklearn.preprocessing import StandardScaler
 
@@ -210,7 +211,25 @@ def main():
 
     # read file list, for trainind data only
     # file_list = sorted(find_files(args.bindir, "[12]*.bin"))
-    file_list = sorted(find_files(args.bindir, "*.bin"))
+    file_list = find_files(args.bindir, "*.bin")
+    cuted_file_list = list()
+    total_count = 0
+    if len(file_list) > 20000:
+        max_num = math.ceil(10000/len(spk_list)) # contain VAD and noVAD
+        count_dict = dict()
+        for fname in file_list:
+            is_vad = fname.split("/")[-3].strip()
+            spk = fname.split("/")[-2].strip()
+            if is_vad not in count_dict:
+                count_dict[is_vad] = dict()
+            if spk in count_dict[is_vad] and count_dict[is_vad][spk] > max_num:
+                continue
+            count_dict[is_vad][spk] = count_dict[is_vad].get(spk, 0) + 1
+            cuted_file_list.append(fname)
+            total_count += 1
+    else:
+        cuted_file_list = file_list
+    file_list = sorted(cuted_file_list)
     logging.info("number of utterances = %d" % len(file_list))
 
     # calculate statistics

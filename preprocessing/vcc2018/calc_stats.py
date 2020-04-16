@@ -162,7 +162,7 @@ def main():
 
     # read file list, for trainind data only
     # file_list = sorted(find_files(args.bindir, "[12]*.bin"))
-    file_list = sorted(find_files(args.bindir, "*.bin"))
+    file_list = sorted(find_files(args.bindir, "*/VAD/*.bin"))
     logging.info("number of utterances = %d" % len(file_list))
 
     # calculate statistics

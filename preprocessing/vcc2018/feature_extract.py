@@ -129,6 +129,9 @@ def world_feature_extract(wav_list, spk_list, feat_param_list, args):
 
         # VAD
         vad_idx = np.where(f0.copy().reshape([-1])>10)[0]
+        if len(vad_idx) < 1:
+            logging.info("invalid wave file: %s" % wav_name)
+            continue
         vad_feats = feats[vad_idx[0] : vad_idx[-1]+1]
 
         # write to bin
@@ -142,23 +145,17 @@ def main():
     parser = argparse.ArgumentParser(
         description="making feature file argsurations.")
 
-    parser.add_argument(
-        "--waveforms", required=True, type=str,
+    parser.add_argument("--waveforms", required=True, type=str,
         help="directory or list of filename of input wavfile")
-    parser.add_argument(
-        "--bindir", required=True, type=str,
+    parser.add_argument("--bindir", required=True, type=str,
         help="directory to save bin")
-    parser.add_argument(
-        "--confdir", required=True, type=str,
+    parser.add_argument("--confdir", required=True, type=str,
         help="configuration directory")
-    parser.add_argument(
-        "--overwrite", default=False,
+    parser.add_argument("--overwrite", default=False,
         type=strtobool, help="if set true, overwrite the exist feature files")
-    parser.add_argument(
-        "--n_jobs", default=12,
+    parser.add_argument("--n_jobs", default=12,
         type=int, help="number of parallel jobs")
-    parser.add_argument(
-        "--verbose", default=1,
+    parser.add_argument("--verbose", default=1,
         type=int, help="log message level")
 
     args = parser.parse_args()
@@ -215,6 +212,7 @@ def main():
     # divide list
     file_lists = np.array_split(file_list, args.n_jobs)
     file_lists = [f_list.tolist() for f_list in file_lists]
+    logging.info("wave files count: %d" % len(file_lists))
 
     # multi processing
     processes = []
